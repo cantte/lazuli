@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProductService {
   final client = Supabase.instance.client;
 
-  Future<void> create(Product product) async {
-    await client.from('products').insert(product);
+  Future create(Product product) async {
+    await client.from('products').insert(product.toJson());
   }
 }

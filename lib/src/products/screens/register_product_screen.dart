@@ -6,12 +6,18 @@ class RegisterProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Stack(
-      children: <Widget>[
-        Column(children: <Widget>[header(context), body()]),
-      ],
-    ));
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+              child: Stack(
+            children: <Widget>[
+              Column(children: <Widget>[header(context), body()]),
+            ],
+          )),
+        ),
+      ),
+    );
   }
 
   Widget header(BuildContext context) {

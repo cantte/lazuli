@@ -23,4 +23,14 @@ class Product {
       quantity: int.parse(json['quantity']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'quantity': quantity,
+    };
+  }
 }

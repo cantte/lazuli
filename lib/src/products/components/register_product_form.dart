@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:lazuli/src/products/models.dart';
 import 'package:lazuli/src/products/service.dart';
-import 'package:logging/logging.dart';
 
 class RegisterProductForm extends StatefulWidget {
   const RegisterProductForm({Key? key}) : super(key: key);
@@ -16,7 +17,6 @@ class RegisterProductForm extends StatefulWidget {
 class _RegisterProductFormState extends State<RegisterProductForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   final service = Get.put(ProductService());
-  final log = Logger('RegisterProductForm');
 
   final loading = false.obs;
 
@@ -52,6 +52,10 @@ class _RegisterProductFormState extends State<RegisterProductForm> {
   Widget idField() {
     return FormBuilderTextField(
       name: 'id',
+      decoration: const InputDecoration(
+        labelText: 'Id',
+        helperText: 'Please enter a product id',
+      ),
       validator: FormBuilderValidators.compose([
         FormBuilderValidators.required(),
         FormBuilderValidators.maxLength(50)
@@ -62,6 +66,10 @@ class _RegisterProductFormState extends State<RegisterProductForm> {
   Widget nameField() {
     return FormBuilderTextField(
       name: 'name',
+      decoration: const InputDecoration(
+        labelText: 'Name',
+        helperText: 'Please enter a product name',
+      ),
       validator: FormBuilderValidators.compose([
         FormBuilderValidators.required(),
         FormBuilderValidators.maxLength(50)
@@ -72,6 +80,13 @@ class _RegisterProductFormState extends State<RegisterProductForm> {
   Widget descriptionField() {
     return FormBuilderTextField(
       name: 'description',
+      keyboardType: TextInputType.multiline,
+      minLines: 1,
+      maxLines: 5,
+      decoration: const InputDecoration(
+        labelText: 'Description',
+        helperText: 'Please enter a product description',
+      ),
       validator: FormBuilderValidators.compose([
         FormBuilderValidators.required(),
         FormBuilderValidators.maxLength(250)
@@ -82,6 +97,10 @@ class _RegisterProductFormState extends State<RegisterProductForm> {
   Widget priceField() {
     return FormBuilderTextField(
         name: 'price',
+        decoration: const InputDecoration(
+          labelText: 'Price',
+          helperText: 'Please enter a product price',
+        ),
         keyboardType: TextInputType.number,
         validator: FormBuilderValidators.compose([
           FormBuilderValidators.required(),
@@ -93,6 +112,10 @@ class _RegisterProductFormState extends State<RegisterProductForm> {
   Widget quantityField() {
     return FormBuilderTextField(
         name: 'quantity',
+        decoration: const InputDecoration(
+          labelText: 'Quantity',
+          helperText: 'Please enter a product quantity',
+        ),
         keyboardType: TextInputType.number,
         validator: FormBuilderValidators.compose([
           FormBuilderValidators.required(),
@@ -124,7 +147,7 @@ class _RegisterProductFormState extends State<RegisterProductForm> {
 
         _formKey.currentState?.reset();
       } catch (e) {
-        log.severe(e);
+        log(e.toString());
       } finally {
         loading.trigger(false);
       }
