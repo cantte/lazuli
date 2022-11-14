@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lazuli/src/users/screens/user_sign_up_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'color_schemes.dart';
+
 Future<void> main() async {
   await Supabase.initialize(
       url: const String.fromEnvironment('SUPABASE_URL'),
@@ -19,9 +21,18 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
+        colorScheme: lightColorScheme,
+        inputDecorationTheme:
+            const InputDecorationTheme(border: OutlineInputBorder()),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+        inputDecorationTheme:
+            const InputDecorationTheme(border: OutlineInputBorder()),
       ),
       home: const Scaffold(
-        body: UserSignUpScreen(),
+        body: SafeArea(child: Center(heightFactor: 10, child: UserSignUpScreen())),
       ),
     );
   }

@@ -6,6 +6,27 @@ class UserSignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const UserForm();
+    return SingleChildScrollView(
+        child: Stack(
+      children: <Widget>[
+        Column(children: <Widget>[header(context), body()]),
+      ],
+    ));
+  }
+
+  Widget header(BuildContext context) {
+    return Center(
+      child: Text(
+        'Sing up',
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
+    );
+  }
+
+  Widget body() {
+    return const Padding(
+      padding: EdgeInsets.all(20.0),
+      child: UserForm(),
+    );
   }
 }
