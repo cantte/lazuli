@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lazuli/src/users/screens/user_sign_up_screen.dart';
 import 'package:lazuli/src/users/user_service.dart';
 
 class SignInForm extends StatefulWidget {
@@ -16,6 +15,8 @@ class _SignInFormState extends State<SignInForm> {
 
   final email = TextEditingController();
   final password = TextEditingController();
+
+  final loading = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -76,27 +77,37 @@ class _SignInFormState extends State<SignInForm> {
   }
 
   Widget signInButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 36),
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-      onPressed: () async {
-        if (_formKey.currentState!.validate()) {
-          await service.signIn(email.text, password.text);
-        }
-      },
-      child: const Text('Sign In'),
-    );
+    return Obx(() => ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 36),
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+          onPressed: loading.isTrue
+              ? null
+              : () async {
+                  if (_formKey.currentState!.validate()) {
+                    loading.trigger(true);
+                    await signIn(email.text, password.text);
+                    loading.trigger(false);
+                  }
+                },
+          child: const Text('Sign In'),
+        ));
+  }
+
+  Future<void> signIn(String email, String password) async {
+    await service.signIn(email, password);
   }
 
   Widget signUpButton() {
-    return TextButton(
-      onPressed: () {
-        Get.to(() => const SignUpScreen());
-      },
-      child: const Text('Sign Up'),
-    );
+    return Obx(() => TextButton(
+          onPressed: loading.isTrue
+              ? null
+              : () {
+                  Get.back();
+                },
+          child: const Text('Sign Up'),
+        ));
   }
 }
