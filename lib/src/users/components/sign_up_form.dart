@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lazuli/src/users/screens/sign_in_screen.dart';
 import 'package:lazuli/src/users/user_service.dart';
 
-class UserForm extends StatefulWidget {
-  const UserForm({Key? key}) : super(key: key);
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  State<UserForm> createState() => _UserFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _UserFormState extends State<UserForm> {
+class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final service = Get.put(UserService());
 
@@ -94,13 +95,8 @@ class _UserFormState extends State<UserForm> {
 
   Widget singInButton() {
     return TextButton(
-      onPressed: () async {
-        if (_formKey.currentState!.validate()) {
-          await signIn(email.text, password.text);
-
-          email.clear();
-          password.clear();
-        }
+      onPressed: () {
+        Get.to(() => const SignInScreen());
       },
       child: const Text('Sing in'),
     );

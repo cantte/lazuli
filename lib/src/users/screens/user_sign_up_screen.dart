@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:lazuli/src/users/components/user_form.dart';
+import 'package:lazuli/src/users/components/sign_up_form.dart';
 
-class UserSignUpScreen extends StatelessWidget {
-  const UserSignUpScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Stack(
-      children: <Widget>[
-        Column(children: <Widget>[header(context), body()]),
-      ],
-    ));
+    return Scaffold(
+      body: SafeArea(
+          child: Center(
+        child: SingleChildScrollView(
+            child: Stack(
+          children: <Widget>[
+            Column(children: <Widget>[header(context), body()]),
+          ],
+        )),
+      )),
+    );
   }
 
   Widget header(BuildContext context) {
     return Center(
       child: Text(
-        'Sing up',
+        'Sign up',
         style: Theme.of(context).textTheme.headlineMedium,
       ),
     );
@@ -26,7 +31,7 @@ class UserSignUpScreen extends StatelessWidget {
   Widget body() {
     return const Padding(
       padding: EdgeInsets.all(20.0),
-      child: UserForm(),
+      child: SignUpForm(),
     );
   }
 }
