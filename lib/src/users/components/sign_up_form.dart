@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lazuli/src/users/screens/sign_in_screen.dart';
 import 'package:lazuli/src/users/user_service.dart';
 
-class UserForm extends StatefulWidget {
-  const UserForm({Key? key}) : super(key: key);
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  State<UserForm> createState() => _UserFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _UserFormState extends State<UserForm> {
+class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final service = Get.put(UserService());
 
   final email = TextEditingController();
   final password = TextEditingController();
+
+  final loading = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -74,43 +77,37 @@ class _UserFormState extends State<UserForm> {
   }
 
   Widget singUpButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 36),
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-      onPressed: () async {
-        if (_formKey.currentState!.validate()) {
-          await signUp(email.text, password.text);
-
-          email.clear();
-          password.clear();
-        }
-      },
-      child: const Text('Sing up'),
-    );
+    return Obx(() => ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 36),
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
+          onPressed: loading.isTrue
+              ? null
+              : () async {
+                  if (_formKey.currentState!.validate()) {
+                    loading.trigger(true);
+                    await signUp(email.text, password.text);
+                    loading.trigger(false);
+                  }
+                },
+          child: const Text('Sing up'),
+        ));
   }
 
   Widget singInButton() {
-    return TextButton(
-      onPressed: () async {
-        if (_formKey.currentState!.validate()) {
-          await signIn(email.text, password.text);
-
-          email.clear();
-          password.clear();
-        }
-      },
-      child: const Text('Sing in'),
-    );
+    return Obx(() => TextButton(
+          onPressed: loading.isTrue
+              ? null
+              : () {
+                  Get.to(() => const SignInScreen());
+                },
+          child: const Text('Sing in'),
+        ));
   }
 
   Future<void> signUp(String email, String password) async {
     await service.signUp(email, password);
-  }
-
-  Future<void> signIn(String email, String password) async {
-    return;
   }
 }
