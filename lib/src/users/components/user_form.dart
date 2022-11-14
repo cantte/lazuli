@@ -20,16 +20,23 @@ class _UserFormState extends State<UserForm> {
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              emailField(),
-              passwordField(),
-              const SizedBox(height: 20.0),
-              submitButton(),
-            ],
-          ),
+        child: Column(
+          children: [
+            emailField(),
+            const SizedBox(height: 20.0),
+            passwordField(),
+            const SizedBox(height: 20.0),
+            singUpButton(),
+            Row(
+              children: [
+                Text('Already have an account?',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline)),
+                const SizedBox(width: 5),
+                singInButton(),
+              ],
+            ),
+          ],
         ));
   }
 
@@ -38,6 +45,7 @@ class _UserFormState extends State<UserForm> {
       controller: email,
       decoration: const InputDecoration(
         labelText: 'Email',
+        helperText: 'Please enter your email',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -51,8 +59,10 @@ class _UserFormState extends State<UserForm> {
   Widget passwordField() {
     return TextFormField(
       controller: password,
+      obscureText: true,
       decoration: const InputDecoration(
         labelText: 'Password',
+        helperText: 'Please enter a password',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -63,8 +73,13 @@ class _UserFormState extends State<UserForm> {
     );
   }
 
-  Widget submitButton() {
+  Widget singUpButton() {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(double.infinity, 36),
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
           await signUp(email.text, password.text);
@@ -73,11 +88,29 @@ class _UserFormState extends State<UserForm> {
           password.clear();
         }
       },
-      child: const Text('Submit'),
+      child: const Text('Sing up'),
+    );
+  }
+
+  Widget singInButton() {
+    return TextButton(
+      onPressed: () async {
+        if (_formKey.currentState!.validate()) {
+          await signIn(email.text, password.text);
+
+          email.clear();
+          password.clear();
+        }
+      },
+      child: const Text('Sing in'),
     );
   }
 
   Future<void> signUp(String email, String password) async {
     await service.signUp(email, password);
+  }
+
+  Future<void> signIn(String email, String password) async {
+    return;
   }
 }
