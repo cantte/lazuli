@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:lazuli/src/config/supabase.dart';
 import 'package:lazuli/src/users/screens/user_sign_up_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const Scaffold(
         body: SafeArea(
-            child: Center(heightFactor: 10, child: UserSignUpScreen())),
+            child: Center(heightFactor: 10, child: SignUpScreen())),
       ),
     );
   }
