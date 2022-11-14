@@ -33,8 +33,7 @@ class MyApp extends StatelessWidget {
             const InputDecorationTheme(border: OutlineInputBorder()),
       ),
       home: const Scaffold(
-        body: SafeArea(
-            child: Center(heightFactor: 10, child: SignUpScreen())),
+        body: SafeArea(child: Center(heightFactor: 10, child: SignUpScreen())),
       ),
     );
   }
