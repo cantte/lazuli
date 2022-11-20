@@ -141,7 +141,7 @@ class _RegisterProductFormState extends State<RegisterProductForm> {
       loading.trigger(true);
 
       try {
-        final product = Product.fromJson(_formKey.currentState!.value);
+        final product = Product.fromForm(_formKey.currentState!.value);
 
         await service.create(product);
 
