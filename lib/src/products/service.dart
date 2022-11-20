@@ -9,4 +9,15 @@ class ProductService {
   Future create(Product product) async {
     await client.from('products').insert(product.toJson());
   }
+
+  Future<Product> find(String id) async {
+    final data = await client.from('products').select().eq('id', id);
+
+    final product = Product.fromJson(data.first);
+    return product;
+  }
+
+  Future update(Product product) async {
+    await client.from('products').update(product.toJson()).eq('id', product.id);
+  }
 }
