@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
+import 'package:lazuli/src/auth/auth_required_state.dart';
 import 'package:lazuli/src/products/models.dart';
 import 'package:lazuli/src/products/service.dart';
 
@@ -14,7 +15,7 @@ class RegisterProductForm extends StatefulWidget {
   State<RegisterProductForm> createState() => _RegisterProductFormState();
 }
 
-class _RegisterProductFormState extends State<RegisterProductForm> {
+class _RegisterProductFormState extends AuthRequiredState<RegisterProductForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   final service = Get.put(ProductService());
 

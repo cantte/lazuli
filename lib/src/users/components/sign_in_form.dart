@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lazuli/src/auth/auth_not_required_state.dart';
 import 'package:lazuli/src/users/user_service.dart';
 
 class SignInForm extends StatefulWidget {
@@ -9,7 +10,7 @@ class SignInForm extends StatefulWidget {
   State<SignInForm> createState() => _SignInFormState();
 }
 
-class _SignInFormState extends State<SignInForm> {
+class _SignInFormState extends AuthNotRequiredState<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final service = Get.put(UserService());
 
