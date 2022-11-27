@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:lazuli/src/auth/auth_required_state.dart';
 import 'package:lazuli/src/orders/models.dart';
 import 'package:lazuli/src/orders/service.dart';
 
@@ -11,7 +12,7 @@ class RegisterOrderForm extends StatefulWidget {
   State<RegisterOrderForm> createState() => _RegisterOrderFormState();
 }
 
-class _RegisterOrderFormState extends State<RegisterOrderForm> {
+class _RegisterOrderFormState extends AuthRequiredState<RegisterOrderForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   final service = Get.put(OrderService());
 
