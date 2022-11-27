@@ -9,23 +9,32 @@ class Order {
   final String customerAddress;
   final String customerPhone;
 
-  final List<OrderItem> items;
+  late List<OrderItem> items;
 
   Order({
     required this.customerName,
     required this.customerAddress,
     required this.customerPhone,
-    required this.items,
-  });
+  }) {
+    items = [];
+    id = 0;
+  }
+
+  Order.withId({
+    required this.id,
+    required this.customerName,
+    required this.customerAddress,
+    required this.customerPhone,
+  }) {
+    items = [];
+  }
 
   factory Order.fromJson(Map<String, dynamic> json) {
-    return Order(
+    return Order.withId(
+      id: json['id'],
       customerName: json['customer_name'],
       customerAddress: json['customer_address'],
       customerPhone: json['customer_phone'],
-      items: (json['items'] as List<dynamic>)
-          .map((e) => OrderItem.fromJson(e))
-          .toList(),
     );
   }
 
@@ -34,9 +43,6 @@ class Order {
       customerName: map['customer_name'],
       customerAddress: map['customer_address'],
       customerPhone: map['customer_phone'],
-      items: (map['items'] as List<dynamic>)
-          .map((e) => OrderItem.fromForm(e))
-          .toList(),
     );
   }
 
