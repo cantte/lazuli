@@ -10,7 +10,7 @@ class OrderService {
     var result =
         await client.from('orders').insert(order.toJson()).select().single();
 
-    var createdOrder = Order.fromJson(result.data);
+    var createdOrder = Order.fromJson(result);
 
     for (var element in order.items) {
       element.orderId = createdOrder.id;
