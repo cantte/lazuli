@@ -10,6 +10,13 @@ class ProductService {
     await client.from('products').insert(product.toJson());
   }
 
+  Future<List<Product>> searchAll() async {
+    final response = await client.from('products').select();
+    final products = response as List;
+
+    return products.map((product) => Product.fromJson(product)).toList();
+  }
+
   Future<Product> find(String id) async {
     final data = await client.from('products').select().eq('id', id);
 

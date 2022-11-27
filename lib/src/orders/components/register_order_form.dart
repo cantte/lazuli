@@ -3,9 +3,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:lazuli/src/auth/auth_required_state.dart';
+import 'package:lazuli/src/orders/components/register_order_item_form.dart';
 import 'package:lazuli/src/orders/models.dart';
 import 'package:lazuli/src/orders/service.dart';
-import 'package:lazuli/src/products/models.dart';
 
 class RegisterOrderForm extends StatefulWidget {
   const RegisterOrderForm({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class _RegisterOrderFormState extends AuthRequiredState<RegisterOrderForm> {
 
   final loading = false.obs;
 
-  final selectedProducts = <Product>[].obs;
+  final selectedItems = <OrderItem>[].obs;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +46,13 @@ class _RegisterOrderFormState extends AuthRequiredState<RegisterOrderForm> {
             height: 20.0,
           ),
           Obx(() => Column(
-                children: selectedProducts
-                    .map((product) => productRow(product))
+                children: selectedItems
+                    .map((orderItem) => orderItemRow(orderItem))
                     .toList(),
               )),
+          const SizedBox(
+            height: 25.0,
+          ),
           submitButton(),
         ]));
   }
@@ -97,22 +100,36 @@ class _RegisterOrderFormState extends AuthRequiredState<RegisterOrderForm> {
         // ignore: deprecated_member_use
         primary: Theme.of(context).colorScheme.secondaryContainer,
       ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-      onPressed: () {},
+      onPressed: () {
+        _addOrderItemDialog(context);
+      },
       label: const Text('Add product'),
       icon: const Icon(Icons.add),
     );
   }
 
-  Widget productRow(Product product) {
+  Widget orderItemRow(OrderItem orderItem) {
     return Row(
       children: [
         Expanded(
-          child: Text(product.name),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(orderItem.product!.name,
+                  style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Text('x${orderItem.quantity}',
+                  style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
         ),
-        Text(product.price.toString()),
+        Text('\$${orderItem.product!.price * orderItem.quantity}',
+            style: Theme.of(context).textTheme.bodyLarge),
         IconButton(
           onPressed: () {
-            selectedProducts.remove(product);
+            selectedItems.remove(orderItem);
           },
           icon: const Icon(Icons.delete),
         ),
@@ -139,6 +156,8 @@ class _RegisterOrderFormState extends AuthRequiredState<RegisterOrderForm> {
       try {
         final order = Order.fromForm(_formKey.currentState!.value);
 
+        order.items = selectedItems;
+
         await service.create(order);
 
         Get.back();
@@ -148,5 +167,15 @@ class _RegisterOrderFormState extends AuthRequiredState<RegisterOrderForm> {
         loading.trigger(false);
       }
     }
+  }
+
+  Future _addOrderItemDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return RegisterOrderItemForm(
+            onSubmit: (OrderItem item) => {selectedItems.add(item)});
+      },
+    );
   }
 }

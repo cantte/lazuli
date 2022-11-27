@@ -59,13 +59,24 @@ class OrderItem {
   final String productId;
   final int quantity;
 
-  late Product product;
+  late Product? product;
   late int orderId;
 
   OrderItem({
     required this.productId,
     required this.quantity,
-  });
+  }) {
+    orderId = 0;
+    product = null;
+  }
+
+  OrderItem.withProduct({
+    required this.productId,
+    required this.quantity,
+    required this.product,
+  }) {
+    orderId = 0;
+  }
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
@@ -75,8 +86,9 @@ class OrderItem {
   }
 
   factory OrderItem.fromForm(Map<String, dynamic> map) {
-    return OrderItem(
-      productId: map['product_id'],
+    return OrderItem.withProduct(
+      productId: map['product'].id,
+      product: map['product'],
       quantity: int.parse(map['quantity']),
     );
   }
@@ -96,5 +108,5 @@ class OrderItem {
     };
   }
 
-  double get total => product.price * quantity;
+  double get total => product!.price * quantity;
 }
